@@ -1,8 +1,11 @@
+use crate::color::Color;
 use crate::canvas::Canvas;
 use crate::geometry::line::Line;
 
 // Draw a 1 width line of a color on a canvas
-pub fn simple(canvas: &mut Canvas, line: &Line, color: u32) {
+pub fn simple(canvas: &mut Canvas, line: &Line, color: Color) {
+    // TODO: Algorithm can be slightly improved by getting rid of the fraction and using
+    // multiplication instead
     let y_step: f32 = (line.end.y - line.start.y) as f32 / (line.end.x - line.start.x) as f32;
     let mut y: f32 = line.start.y as f32;
 

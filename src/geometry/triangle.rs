@@ -30,6 +30,8 @@ impl Triangle {
         (self.corner1.y - self.corner3.y)
     }
 
+    // Get point-triangle collision with cross product
+    // NOTE: There may be a faster way to achieve with dot product
     pub fn contains(&self, point: Point) -> bool {
         let trig1 = Self::new(point, self.corner1, self.corner2);
         let trig2 = Self::new(point, self.corner3, self.corner1);

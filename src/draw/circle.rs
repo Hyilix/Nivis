@@ -1,9 +1,10 @@
+use crate::color::Color;
 use crate::canvas::Canvas;
 use crate::geometry;
 use geometry::circle::Circle;
 
 // Draw a filled circle onto a canvas with a color
-pub fn filled(canvas: &mut Canvas, circle: &Circle, color: u32) {
+pub fn filled(canvas: &mut Canvas, circle: &Circle, color: Color) {
     let center = circle.center;
 
     let y_start: i32 = center.y - circle.radius as i32;
@@ -24,7 +25,7 @@ pub fn filled(canvas: &mut Canvas, circle: &Circle, color: u32) {
 }
 
 // Draw a circle outline onto a canvas with a color
-pub fn outlined(canvas: &mut Canvas, circle: &Circle, color: u32) {
+pub fn outlined(canvas: &mut Canvas, circle: &Circle, color: Color) {
     let center = circle.center;
 
     let y_start: i32 = center.y - circle.radius as i32;

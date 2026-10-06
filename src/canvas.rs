@@ -1,5 +1,6 @@
 // Used to store information about the pixels
 use crate::geometry::rectangle;
+use crate::color::Color;
 
 #[inline]
 fn flat_index(x: u32, y: u32, w: u32) -> usize {
@@ -15,19 +16,19 @@ fn from_index(i: u32, w: u32) -> (u32, u32) {
 pub struct Canvas {
     width: u32,
     height: u32,
-    pixels: Vec<u32>,
+    pixels: Vec<Color>,
 }
 
 impl Default for Canvas {
     // Default canvas implementation with some arbitrary values used
     fn default() -> Self {
-        Self::new(16, 16, 0xFF000000)
+        Self::new(16, 16, Color::new(0, 0, 0, 0xFF))
     }
 }
 
 // Boiler plate stuff
 impl Canvas {
-    pub fn new(width: u32, height : u32, color: u32) -> Self {
+    pub fn new(width: u32, height : u32, color: Color) -> Self {
         Self {
             width,
             height,
@@ -35,11 +36,15 @@ impl Canvas {
         }
     }
 
-    pub fn get_pixels(&self) -> &Vec<u32> {
+    pub fn get_pixels(&self) -> &Vec<Color> {
         &self.pixels
     }
 
-    pub fn into_pixels(self) -> Vec<u32> {
+    pub fn get_pixels_u32(&self) -> Vec<u32> {
+        self.pixels.iter().map(|x| x.to_u32()).collect()
+    }
+
+    pub fn into_pixels(self) -> Vec<Color> {
         self.pixels
     }
 
@@ -81,7 +86,7 @@ impl Canvas {
     pub fn draw_point(
         &mut self,
         point: (i32, i32),
-        color: u32,
+        color: Color,
     ) {
         println!("Draw point: {} : {}", point.0, point.1);
         let index = flat_index(point.0 as u32, point.1 as u32, self.width);
@@ -91,7 +96,7 @@ impl Canvas {
     // Fill entire canvas with a color
     pub fn fill(
         &mut self,
-        color: u32,
+        color: Color,
     ) {
         self.pixels = vec![color; (self.width * self.height) as usize];
     }
@@ -100,7 +105,7 @@ impl Canvas {
     pub fn fill_rect(
         &mut self,
         rect: &rectangle::Rectangle,
-        color: u32,
+        color: Color,
     ) {
         for y in 0..rect.height as i32 {
             for x in 0..rect.width as i32 {
@@ -133,7 +138,7 @@ impl Canvas {
 
         let width: u32 = (self.width as f32 * factor) as u32;
         let height: u32 = (self.width as f32 * factor) as u32;
-        let mut pixels: Vec<u32> = vec![0; (width * height) as usize];
+        let mut pixels: Vec<Color> = vec![Color::new(0, 0, 0, 0); (width * height) as usize];
 
         for i in 0..(width * height) {
             let (new_x, new_y) = from_index(i, width);
@@ -168,7 +173,7 @@ impl Canvas {
             return;
         }
 
-        let mut pixels: Vec<u32> = vec![0; (width * height) as usize];
+        let mut pixels: Vec<Color> = vec![Color::new(0, 0, 0, 0); (width * height) as usize];
 
         for i in 0..(width * height) {
             let (new_x, new_y) = from_index(i, width);
@@ -207,7 +212,7 @@ impl Canvas {
             return self.clone();
         }
 
-        let mut pixels: Vec<u32> = vec![0xFF000000; (area.width * area.height) as usize];
+        let mut pixels: Vec<Color> = vec![Color::new(0, 0, 0, 0xFF); (area.width * area.height) as usize];
 
         for y in 0..area.height as i32 {
             for x in 0..area.width as i32 {
@@ -240,7 +245,7 @@ impl Canvas {
     // Add a new color to the canvas every 'steps' pixels
     pub fn dither(
         &mut self,
-        color: u32,
+        color: Color,
         steps: u32,
     ) {
         for (current_steps, pixel) in self.pixels.iter_mut().enumerate() {
@@ -255,7 +260,7 @@ impl Canvas {
     // Adds pixels to the surface to create a checkerboard pattern
     pub fn checkerboard(
         &mut self,
-        color: u32,
+        color: Color,
     ) {
         if self.width % 2 == 1 {
             self.dither(color, 2);

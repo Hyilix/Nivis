@@ -1,8 +1,9 @@
+use crate::color::Color;
 use crate::canvas::Canvas;
 use crate::geometry::{triangle::Triangle, point::Point};
 
 // Draw a filled triangle of a color onto a canvas
-pub fn filled(canvas: &mut Canvas, tri: &Triangle, color: u32) {
+pub fn filled(canvas: &mut Canvas, tri: &Triangle, color: Color) {
     let x_start: i32 = (tri.corner1.x).min(tri.corner2.x).min(tri.corner3.x);
     let x_end: i32 = (tri.corner1.x).max(tri.corner2.x).max(tri.corner3.x);
     let y_start: i32 = (tri.corner1.y).min(tri.corner2.y).min(tri.corner3.y);
